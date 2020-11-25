@@ -1,12 +1,14 @@
 from . import UseFirebase
 from . import XMLManipulate
 
-def updateArticles():
-    for feed in UseFirebase.getFeeds():
-        link = feed["link"]
+def updateArticles(): #Add all new articles to DB
+    for feed in UseFirebase.getFeeds(): #For each RSS feed
 
-        rawData = XMLManipulate.convertRawData(link)
+        link = feed["link"] #Get the RSS link
 
-        data = XMLManipulate.rawDataToDict(rawData)
+        rawData = XMLManipulate.convertRawData(link) #Convert XML to Python-struct
 
-        UseFirebase.postArticles(data)
+        data = XMLManipulate.rawDataToDict(rawData) #Turn struct into dict
+
+        UseFirebase.postArticles(data) #Post new articles to DB
+

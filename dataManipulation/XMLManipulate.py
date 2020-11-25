@@ -13,9 +13,9 @@ def convertRawData(dataLink): #Convert raw XML to Dict
     return convertedDict
 
 def rawDataToDict(rawData): #Convert all the raw data into something usable
-    finalDict = {
+    finalDict = { 
         "title": rawData["title"],
-        "entries": []
+        "entries": [] #Add articles jere
     }
     
     for article in rawData["entry"]: #Entry is an array in the dict
