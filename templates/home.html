@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="progress blue darken-3" style="display: none;">
+        <div class="indeterminate blue lighten-1"></div>
+    </div>
+    <div class="contentMain">
+        {% if articles|length > 0 %}
+            <table class="striped">
+                <thead class="blue lighten-1">
+                <tr>
+                    <th style="color: white;">Title</th>
+                    <th style="color: white;">Content</th>
+                    <th style="color: white;">Published</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    {% for article in articles %}
+                        <tr>
+                            <td>
+                                <a href="{{ article["link"] }}" target="_blank">{{ article["title"]|safe }}</a> <br />
+                            </td>
+                            <td>{{ article["content"]|safe|truncate(75) }}</td>
+                            <td>{{ article["published"] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>There are no articles in the database yet!</p>
+        {% endif %}
+
+        <a onclick="updateArticles()" class="btn-large waves-effect waves-light blue lighten-1 actionButton">Update Articles</a>
+    </div>
+
+        <style>
+            .actionButton {
+                position: fixed;
+                bottom: 50px;
+                right: 50px;
+                border-radius: 3em;
+                transition-duration: .5s;
+            }
+            .actionButton:hover {
+                border-radius: 0;
+                transition-duration: .5s;
+            }
+        </style>
+
+    <script>
+        function updateArticles() {
+            document.getElementsByClassName("contentMain")[0].style.display = "none";
+            document.getElementsByClassName("progress")[0].style.display = "block";
+
+            var opts = {
+                method: 'POST',      
+                headers: {}
+            };
+            fetch('/update', opts).then(function (response) {
+                return response.json();
+            })
+            .then(function (body) {
+                if(body === "done") {
+                    window.location.reload();
+                }
+            });
+    }
+    </script>
+    
+{% endblock %}
