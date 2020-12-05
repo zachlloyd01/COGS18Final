@@ -4,6 +4,8 @@
         <!-- Compiled and minified CSS -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
         <!-- Compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
@@ -16,6 +18,7 @@
           <nav>
             <div class="nav-wrapper blue lighten-1">
               <a class="brand-logo">zachFeeds</a>
+              <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
               <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a href="/">Home</a></li>
                 <li><a href="/feeds">Feeds</a></li>
@@ -23,10 +26,23 @@
             </div>
           </nav>
         </div>
+
+        <ul class="sidenav" id="mobile-demo">
+          <li><p align="center" style="font-size: 200%">zachFeeds</p></li>
+          <li><a href="/">Home</a></li>
+          <li><a href="/feeds">Feeds</a></li>
+        </ul>
         <div class="container" style="margin-top: 5em;">
             {% block content %}
             {% endblock %}    
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() { //On page load
+            let elems = document.querySelectorAll('.sidenav'); //Get sidenav
+            let instances = M.Sidenav.init(elems); //initialize the sidenav behavior
+          });
+        </script>
 
     </body>
 </html>

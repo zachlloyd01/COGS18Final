@@ -1,35 +1,35 @@
 import requests #Get/Post data to and from web servers
 import xmltodict #Parse raw XML data from RSS Feeds
 
-def getRawData(dataLink): #Get raw data
-    return requests.get(dataLink).text #Requests returns raw XML data
+def get_raw_data(data_link): #Get raw data
+    return requests.get(data_link).text #Requests returns raw XML data
 
-def convertRawData(dataLink): #Convert raw XML to Dict
-    rawData = getRawData(dataLink) #Get raw XML Data
-    rawDict =  xmltodict.parse(rawData, dict_constructor=dict) #Convert to OrderedDict
+def convert_raw_data(data_link): #Convert raw XML to Dict
+    raw_data = get_raw_data(data_link) #Get raw XML Data
+    raw_dict =  xmltodict.parse(raw_data, dict_constructor=dict) #Convert to OrderedDict
     
-    convertedDict = rawDict["feed"] #Root element of RSS Feed
+    converted_dict = raw_dict["feed"] #Root element of RSS Feed
     
-    return convertedDict
+    return converted_dict
 
-def rawDataToDict(rawData): #Convert all the raw data into something usable
-    finalDict = { 
-        "title": rawData["title"],
+def raw_data_to_dict(raw_data): #Convert all the raw data into something usable
+    final_dict = { 
+        "title": raw_data["title"],
         "entries": [] #Add articles jere
     }
     
-    for article in rawData["entry"]: #Entry is an array in the dict
-        if "#text" in article["title"]:
-            articleDict = { #Get necessary elements from current entry
+    for article in raw_data["entry"]: #Entry is an array in the dict
+        if "#text" in article["title"] and '#text' in article['content']:
+            article_dict = { #Get necessary elements from current entry
                 "title": article["title"]["#text"], 
                 "link": article["link"]["@href"],
                 "content": article["content"]['#text'],
                 "published": article["published"]
             }
             
-            finalDict["entries"].append(articleDict) #Append current entry to the data
+            final_dict["entries"].append(article_dict) #Append current entry to the data
         
-    return finalDict
+    return final_dict
 
 
     

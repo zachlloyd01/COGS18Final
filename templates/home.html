@@ -57,16 +57,20 @@
             document.getElementsByClassName("contentMain")[0].style.display = "none";
             document.getElementsByClassName("progress")[0].style.display = "block";
 
-            var opts = {
+            let opts = {
                 method: 'POST',      
                 headers: {}
             };
-            fetch('/update', opts).then(function (response) {
+            fetch('/update', opts)
+            .then(function (response) {
                 return response.json();
             })
             .then(function (body) {
                 if(body === "done") {
                     window.location.reload();
+                }
+                else {
+                    console.log(body);
                 }
             });
     }

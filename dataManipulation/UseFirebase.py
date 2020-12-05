@@ -5,7 +5,7 @@ from datetime import datetime
 
 def init(): #Initialize the database
     try:
-        cred = credentials.Certificate('firebaseKey.json') #Service Account for DB Access
+        cred = credentials.Certificate('FirebaseKey.json') #Service Account for DB Access
 
         firebase_admin.initialize_app(cred, {
             'databaseURL': 'https://zachfeeds-86449.firebaseio.com/' #Create FB at this URL
@@ -17,58 +17,60 @@ def init(): #Initialize the database
         print("Firebase root already existed!")
 
 
-def getArticles(): #Get all articles from the database
+def get_articles(): #Get all articles from the database
     ref = db.reference('articles') #get articles data
 
     articles = ref.get()
 
-    storedArticles = [] #Array of stored articles to later iterate over
+    stored_articles = [] #Array of stored articles to later iterate over
 
     if articles:
         for article in articles: #For article in FB return
-            currentArticle = {} 
+            stored_article = {} 
             for elem in articles[article]: #For each element of the article
-                currentArticle[elem] = articles[article][elem] #Append data to the dict
-            storedArticles.append(currentArticle) #Append the dict to the array
+                stored_article[elem] = articles[article][elem] #Append data to the dict
+            stored_articles.append(stored_article) #Append the dict to the array
     
-    return storedArticles
+    return stored_articles
 
-def getFeeds(): #Get all feed URLs from the database
+def get_feeds(): #Get all feed URLs from the database
     ref = db.reference('feeds') #Get feeds data
 
     feeds = ref.get() #Get data
 
-    storedFeeds = []
+    stored_feeds = []
 
     for feed in feeds:
-        storedFeeds.append(
+        stored_feeds.append(
             {
                 "link": feeds[feed] #Append current link to the array
             }
         )
     
-    return storedFeeds
+    return stored_feeds
 
-def addFeed(feedURL): #Add feed to the DB
+def add_feed(feedURL): #Add feed to the DB
     ref = db.reference('feeds') #Get feeds root-level
-    ref.push(feedURL) #Ad new feed to the DB
+    feeds = ref.get()
+    if not feedURL in feeds: 
+        ref.push(feedURL) #Ad new feed to the DB
 
-def postArticles(current_data):
+def post_articles(current_data):
     ref = db.reference('articles') #Put articles
 
     articles = ref.get() #Get all articles
 
     if articles: #If there are articles
-        storedArticles = []
+        stored_articles = []
 
         for stored in articles: #Append the article link
-            storedArticles.append(   
+            stored_articles.append(   
                 articles[stored]['link']  
             )
 
         for article in current_data["entries"]: #For each article
         
-            if not article['link'] in storedArticles: #Prevent duplicate articles
+            if not article['link'] in stored_articles: #Prevent duplicate articles
 
                 new_article_ref = ref.push({ #Post the data
                     'title': article['title'],
