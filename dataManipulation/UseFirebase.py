@@ -4,6 +4,8 @@ from firebase_admin import credentials, db
 from datetime import datetime
 
 def init(): #Initialize the database
+    """ function to connect client to Firebase. 
+        Errors if no except block and already connected. No return. """
     try:
         cred = credentials.Certificate('FirebaseKey.json') #Service Account for DB Access
 
@@ -18,11 +20,14 @@ def init(): #Initialize the database
 
 
 def get_articles(): #Get all articles from the database
+    """ function to get every article 
+    from Firebase and put it into a readable list of formatted dicts.
+     Returns list  """
     ref = db.reference('articles') #get articles data
 
     articles = ref.get()
 
-    stored_articles = [] #Array of stored articles to later iterate over
+    stored_articles = [] #list of stored articles to later iterate over
 
     if articles:
         for article in articles: #For article in FB return
@@ -34,6 +39,8 @@ def get_articles(): #Get all articles from the database
     return stored_articles
 
 def get_feeds(): #Get all feed URLs from the database
+    """ get all feeds from Firebase 
+    and put into list of dicts. Returns list. """
     ref = db.reference('feeds') #Get feeds data
 
     feeds = ref.get() #Get data
@@ -50,12 +57,15 @@ def get_feeds(): #Get all feed URLs from the database
     return stored_feeds
 
 def add_feed(feedURL): #Add feed to the DB
+    """ function to add feed to the firebase DB. No return.  """
     ref = db.reference('feeds') #Get feeds root-level
     feeds = ref.get()
     if not feedURL in feeds: 
         ref.push(feedURL) #Ad new feed to the DB
 
 def post_articles(current_data):
+    """ Function to iterate over all given articles, 
+        check if they are in DB already, else put them there. No return.  """
     ref = db.reference('articles') #Put articles
 
     articles = ref.get() #Get all articles

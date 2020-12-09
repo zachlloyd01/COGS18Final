@@ -2,9 +2,11 @@ import requests #Get/Post data to and from web servers
 import xmltodict #Parse raw XML data from RSS Feeds
 
 def get_raw_data(data_link): #Get raw data
+    """ function to pull raw RSS data. returns string of XML """
     return requests.get(data_link).text #Requests returns raw XML data
 
 def convert_raw_data(data_link): #Convert raw XML to Dict
+    """ function to convert raw XML into an unformatted dict. Returns dict. """
     raw_data = get_raw_data(data_link) #Get raw XML Data
     raw_dict =  xmltodict.parse(raw_data, dict_constructor=dict) #Convert to OrderedDict
     
@@ -13,6 +15,8 @@ def convert_raw_data(data_link): #Convert raw XML to Dict
     return converted_dict
 
 def raw_data_to_dict(raw_data): #Convert all the raw data into something usable
+    """ function to create a formatted dict containing 
+    an array of articles, each one is a formatted dict. Returns dict.  """
     final_dict = { 
         "title": raw_data["title"],
         "entries": [] #Add articles jere
